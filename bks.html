@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bks</title>
+    <meta charset="utf-8">
+    <!--library list-->
+    <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!--End of library list-->
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <script src="./bks.js"></script>
+    <link rel="stylesheet" type="text/css" href="./bks.css">
+  </head>
+  <body>
+    <div class="main-cont">
+      <!--Input form-->
+      <div class="leftCont">
+        <div class="inpField">
+          <!--Name-->
+          <div class="input-group">
+            <input type="text" class="form-control userName" placeholder="Name">
+            <span class="input-group-addon">Name</span>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu"></ul>
+          </div>
+          <!--Phone-->
+          <div class="input-group">
+            <input type="text" class="form-control phoneNumber" placeholder="Phone">
+            <span class="input-group-addon">Phone</span>
+          </div>
+        </div>
+        <!--Btns-->
+        <div class="btnField">
+          <div class="btn-group acceptBtnGrp" role="group" aria-label="...">
+            <button type="button" class="btn btn btn-success btstrpCstmBtn">Accept</button>
+          </div>
+          <div class="alert" role="alert"></div>
+        </div>
+        <!--EndBtns-->
+      </div>
+      <!--End of input form-->
+      <!--Books list-->
+      <div class="rightCont">
+        <div class="bookList">
+          <div class="list-group">
+            <a href="#" class="list-group-item">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+              <h4 class="list-group-item-heading">Tanenbaum</h4>
+              <p class="list-group-item-text"> <span class="phoneNumber">8-900-000-0000</span> </p>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--End of books list-->
+    </div>
+  </body>
+</html>
