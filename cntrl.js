@@ -1,23 +1,23 @@
 var Control = {
-  express : require('express'),
-  http : require('http'),
-  fs : require('fs'),
-  mongoose : require('mongoose'),
-  io : {},
-  serverRun : function() {
+  express: require('express'),
+  http: require('http'),
+  fs: require('fs'),
+  mongoose: require('mongoose'),
+  io: {},
+  serverRun: function() {
     var collection, socketGroup;
     this.serverListen();
     socketGroup = this.mongoConnect();
     return socketGroup();
   },
-  serverListen : function() { 
+  serverListen: function() {
     var app = this.express();
     var server = this.http.createServer(app);
     this.io = require('socket.io').listen(server);
     this.routingCntrl(app);
     return server.listen(8080);
   },
-  mongoConnect : function() {
+  mongoConnect: function() {
     var that = this;
     var User;
     var DB = this.mongoose.connection;
@@ -31,28 +31,28 @@ var Control = {
                 phoneNumber: String
               });
               User = mongoDriver.model('User', userSchema);
-              that.socketGroup.call(that, User);   
+              that.socketGroup.call(that, User);
             });
     };
   },
   //REQUIER!!!!
-  routingCntrl : function(app) {
-    app.get('/', function (req, res) {
+  routingCntrl: function(app) {
+    app.get('/', function(req, res) {
       res.sendFile(__dirname + '/bks.html');
     });
-    app.get('/bks.js', function (req, res) {
+    app.get('/bks.js', function(req, res) {
       res.sendFile(__dirname + '/bks.js');
     });
-    app.get('/bks.css', function (req, res) {
+    app.get('/bks.css', function(req, res) {
       res.sendFile(__dirname + '/bks.css');
     });
   },
-  socketGroup : function(User) {
-    this.io.sockets.on('connection', function (socket) {
-      if (User === undefined){
+  socketGroup: function(User) {
+    this.io.sockets.on('connection', function(socket) {
+      if (User === undefined) {
         socket.emit('showAlert', 'error', 'DataBase connection problem');
         return 'DataBase connection problem';
-      };
+      }
       //get users
       socket.on('getBooks', function() {
         User.find(function(err, user) {
@@ -61,7 +61,7 @@ var Control = {
         });
       });
       //add user
-      socket.on('addItm', function (data) {
+      socket.on('addItm', function(data) {
         if (!data) {
           return 'add item data undefined';
         }
@@ -80,12 +80,20 @@ var Control = {
         if (!userName) {
           socket.emit('showAlert', 'warning', 'Empty set');
           return 'delete item data undefined';
-        };
+        }
         phoneNumber = phoneNumber === undefined ? '' : phoneNumber;
-        User.where({ 'userName': userName, 'phoneNumber': phoneNumber }).findOneAndRemove(function(err, user) {
-          if (err) return console.error(err);
-          socket.emit('showAlert', 'success', 'The user has been deleted');
-        });
+        User
+          .where({'userName': userName, 'phoneNumber': phoneNumber})
+          .findOneAndRemove(
+            function(err, user) {
+              if (err) return console.error(err);
+                socket.emit(
+                  'showAlert',
+                  'success',
+                  'The user has been deleted'
+                );
+            }
+          );
       });
       //WHERE userName LIKE @pattern
       socket.on('findLike', function(pattern) {
@@ -93,8 +101,8 @@ var Control = {
         var query = { userName: new RegExp('^' + pattern, 'i') };
         if (!pattern) {
           return 'pattern search undefined';
-        };
-        User.find(query , function(err, user) {
+        }
+        User.find(query, function(err, user) {
           if (err) return console.error(err);
           socket.emit('userLikeRes', user);
         });
